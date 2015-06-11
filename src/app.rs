@@ -1,9 +1,11 @@
 use piston::event::*;
-use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
+use actor::Player;
+
 pub struct App {
-	gl: GlGraphics
+	gl: GlGraphics,
+	players: Vec<Player>
 }
 
 impl App {
@@ -19,7 +21,8 @@ impl App {
 
 	pub fn new() -> App {
 		App {
-			gl: GlGraphics::new(OpenGL::_3_2)
+			gl: GlGraphics::new(OpenGL::_3_2),
+			players: vec![Player::new((10, 10))]
 		}
 	}
 }

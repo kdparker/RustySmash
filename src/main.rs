@@ -8,6 +8,7 @@ use piston::event::*;
 use glutin_window::GlutinWindow as Window;
 
 mod app;
+mod actor;
 
 fn main() {
 	let window = Window::new(
