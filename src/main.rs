@@ -8,7 +8,7 @@ use piston::event::*;
 use glutin_window::GlutinWindow as Window;
 
 mod app;
-mod actor;
+mod player;
 
 fn main() {
 	let window = Window::new(
@@ -24,6 +24,10 @@ fn main() {
 	for e in window.events() {
 		if let Some(r) = e.render_args() {
 			app.render(&r);
+		}
+
+		if let Some(u) = e.update_args() {
+			app.update(&u);
 		}
 	}
 }

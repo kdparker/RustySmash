@@ -1,7 +1,7 @@
 use piston::event::*;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
-use actor::Player;
+use player::*;
 
 pub struct App {
 	gl: GlGraphics,
@@ -19,10 +19,16 @@ impl App {
 		});
 	}
 
+	pub fn update(&mut self, args: &UpdateArgs) {
+		for player in self.players.iter_mut() {
+			player.change_pos((args.dt, args.dt));
+		}
+	}
+
 	pub fn new() -> App {
 		App {
 			gl: GlGraphics::new(OpenGL::_3_2),
-			players: vec![Player::new((10, 10))]
+			players: vec![Player::new((10.0, 10.0))]
 		}
 	}
 }
