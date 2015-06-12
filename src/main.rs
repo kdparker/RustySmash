@@ -6,6 +6,7 @@ extern crate opengl_graphics;
 use piston::window::WindowSettings;
 use piston::event::*;
 use glutin_window::GlutinWindow as Window;
+use opengl_graphics::{ GlGraphics, OpenGL };
 
 mod app;
 mod player;
@@ -20,10 +21,10 @@ fn main() {
 	);
 
 	let mut app = app::App::new();
-
+	let mut gl = GlGraphics::new(OpenGL::_3_2);
 	for e in window.events() {
 		if let Some(r) = e.render_args() {
-			app.render(&r);
+			app.render(&r, &mut gl);
 		}
 
 		if let Some(u) = e.update_args() {

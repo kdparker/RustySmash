@@ -1,21 +1,24 @@
 use piston::event::*;
-use opengl_graphics::{ GlGraphics, OpenGL };
+use opengl_graphics::{ GlGraphics };
 
 use player::*;
 
 pub struct App {
-	gl: GlGraphics,
 	players: Vec<Player>
 }
 
 impl App {
-	pub fn render(&mut self, args: &RenderArgs) {
+	pub fn render(&mut self, args: &RenderArgs, gl: &mut GlGraphics) {
 		use graphics::*;
 
 		const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
 
-		self.gl.draw(args.viewport(), |c, gl| {
+		gl.draw(args.viewport(), |c, gl| {
 			clear(BLACK, gl);
+			for player in self.players.iter() {
+				let transform = player.transform(c);
+				image(player.get_texture(), transform, gl);
+			}
 		});
 	}
 
@@ -27,8 +30,7 @@ impl App {
 
 	pub fn new() -> App {
 		App {
-			gl: GlGraphics::new(OpenGL::_3_2),
-			players: vec![Player::new(10.0, 10.0, 64, 64)]
+			players: vec![Player::new(10.0, 10.0, 64, 64)],
 		}
 	}
 }
