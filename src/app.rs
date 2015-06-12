@@ -28,7 +28,7 @@ impl App {
 	pub fn new() -> App {
 		App {
 			gl: GlGraphics::new(OpenGL::_3_2),
-			players: vec![Player::new((10.0, 10.0))]
+			players: vec![Player::new(10.0, 10.0, 64, 64)]
 		}
 	}
 }
