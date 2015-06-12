@@ -7,6 +7,7 @@ use piston::window::WindowSettings;
 use piston::event::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
+use piston::input::{ Button };
 
 mod app;
 mod player;
@@ -23,12 +24,20 @@ fn main() {
 	let mut app = app::App::new();
 	let mut gl = GlGraphics::new(OpenGL::_3_2);
 	for e in window.events() {
-		if let Some(r) = e.render_args() {
-			app.render(&r, &mut gl);
+		if let Some(Button::Keyboard(key)) = e.press_args() {
+			app.keypress(key)
+		}
+
+		if let Some(Button::Keyboard(key)) = e.release_args() {
+			app.keyrelease(key)
 		}
 
 		if let Some(u) = e.update_args() {
 			app.update(&u);
+		}
+
+		if let Some(r) = e.render_args() {
+			app.render(&r, &mut gl);
 		}
 	}
 }

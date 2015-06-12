@@ -1,5 +1,6 @@
 use piston::event::*;
 use opengl_graphics::{ GlGraphics };
+use piston::input::keyboard::Key;
 
 use player::*;
 
@@ -24,13 +25,35 @@ impl App {
 
 	pub fn update(&mut self, args: &UpdateArgs) {
 		for player in self.players.iter_mut() {
-			player.change_pos((args.dt, args.dt));
+			player.update(args.dt);
 		}
 	}
 
 	pub fn new() -> App {
 		App {
 			players: vec![Player::new(10.0, 10.0, 64, 64)],
+		}
+	}
+
+	pub fn keypress(&mut self, key: Key) {
+		println!("pressed: {:?}", key);
+		match key {
+			Key::W => self.players[0].update_velocity(0, -1),
+			Key::A => self.players[0].update_velocity(-1, 0),
+			Key::S => self.players[0].update_velocity(0, 1),
+			Key::D => self.players[0].update_velocity(1, 0),
+			_      => {}
+		}
+	}
+
+	pub fn keyrelease(&mut self, key: Key) {
+		println!("released: {:?}", key);
+		match key {
+			Key::W => self.players[0].update_velocity(0, 1),
+			Key::A => self.players[0].update_velocity(1, 0),
+			Key::S => self.players[0].update_velocity(0, -1),
+			Key::D => self.players[0].update_velocity(-1, 0),
+			_      => {}
 		}
 	}
 }
