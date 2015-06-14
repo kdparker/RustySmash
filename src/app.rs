@@ -36,23 +36,21 @@ impl App {
 	}
 
 	pub fn keypress(&mut self, key: Key) {
-		println!("pressed: {:?}", key);
 		match key {
-			Key::W => self.players[0].update_velocity(0, -1),
-			Key::A => self.players[0].update_velocity(-1, 0),
-			Key::S => self.players[0].update_velocity(0, 1),
-			Key::D => self.players[0].update_velocity(1, 0),
+			Key::W => self.players[0].toggle_direction(Direction::Up, true),
+			Key::A => self.players[0].toggle_direction(Direction::Left, true),
+			Key::S => self.players[0].toggle_direction(Direction::Down, true),
+			Key::D => self.players[0].toggle_direction(Direction::Right, true),
 			_      => {}
 		}
 	}
 
 	pub fn keyrelease(&mut self, key: Key) {
-		println!("released: {:?}", key);
 		match key {
-			Key::W => self.players[0].update_velocity(0, 1),
-			Key::A => self.players[0].update_velocity(1, 0),
-			Key::S => self.players[0].update_velocity(0, -1),
-			Key::D => self.players[0].update_velocity(-1, 0),
+			Key::W => self.players[0].toggle_direction(Direction::Up, false),
+			Key::A => self.players[0].toggle_direction(Direction::Left, false),
+			Key::S => self.players[0].toggle_direction(Direction::Down, false),
+			Key::D => self.players[0].toggle_direction(Direction::Right, false),
 			_      => {}
 		}
 	}
