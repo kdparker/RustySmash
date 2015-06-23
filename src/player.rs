@@ -1,6 +1,4 @@
-use opengl_graphics::{Texture};
-use graphics::*;
-use std::path::Path;
+use piston_window::*;
 
 type Transform = [[f64; 3]; 2];
 
@@ -25,16 +23,14 @@ pub trait Actor {
 	fn get_pos(&self) -> (i32, i32);
 	fn get_height(&self) -> i32;
 	fn get_width(&self) -> i32;
-	fn transform(&self, c: Context) -> Transform;
-	fn get_texture(&self) -> &Texture;
 	fn toggle_direction(&mut self, Direction, bool);
+	fn get_rect(&self) -> [f64; 4];
 }
 
 pub struct Player {
 	rect: (f64, f64, i32, i32),
-	sprite: Texture,
 	direction: [bool; 4],
-	velocity: [i8; 2]
+	velocity: [f64; 2]
 }
 
 impl Actor for Player {
@@ -59,12 +55,8 @@ impl Actor for Player {
 		self.rect.3
 	}
 
-	fn transform(&self, c: Context) -> Transform {
-		c.transform.trans(self.rect.0, self.rect.1)
-	}
-
-	fn get_texture(&self) -> &Texture {
-		&self.sprite
+	fn get_rect(&self) -> [f64; 4] {
+		[self.rect.0, self.rect.1, self.rect.2 as f64, self.rect.3 as f64]
 	}
 
 	fn toggle_direction(&mut self, dir: Direction, on_off: bool) {
@@ -74,11 +66,11 @@ impl Actor for Player {
 
 impl Player {
 	fn update_velocity(&mut self) {
-		let mut velocity = [0, 0];
-		if (self.direction[direction_to_int(Direction::Left)]) { velocity[0] -= 1; }
-		if (self.direction[direction_to_int(Direction::Right)]) { velocity[0] += 1; }
-		if (self.direction[direction_to_int(Direction::Up)]) { velocity[1] -= 1; }
-		if (self.direction[direction_to_int(Direction::Down)]) { velocity[1] += 1; }
+		let mut velocity = [0.0, 0.0];
+		if self.direction[direction_to_int(Direction::Left)] { velocity[0] -= 1.0; }
+		if self.direction[direction_to_int(Direction::Right)] { velocity[0] += 1.0; }
+		if self.direction[direction_to_int(Direction::Up)] { velocity[1] -= 1.0; }
+		if self.direction[direction_to_int(Direction::Down)] { velocity[1] += 1.0; }
 
 		self.velocity = velocity;
 	}
@@ -86,11 +78,8 @@ impl Player {
 	pub fn new(x: f64, y: f64, height: i32, width: i32) -> Player {
 		Player {
 			rect: (x, y, height, width),
-			sprite: Some(Texture::from_path(Path::new("./assets/sprites/ness.png"))
-												.unwrap())
-												.expect("Failed to load ness sprite"),
 			direction: [false, false, false, false],
-			velocity: [0, 0]
+			velocity: [0.0, 0.0]
 		}
 	}
 }

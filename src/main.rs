@@ -1,29 +1,21 @@
-extern crate piston;
-extern crate graphics;
-extern crate glutin_window;
-extern crate opengl_graphics;
+extern crate piston_window;
 
-use piston::window::WindowSettings;
-use piston::event::*;
-use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{ GlGraphics, OpenGL };
-use piston::input::{ Button };
+use piston_window::*;
 
 mod app;
 mod player;
 
 fn main() {
-	let window = Window::new(
+	let opengl = OpenGL::_3_2;
+
+	let window: PistonWindow = 
 		WindowSettings::new(
-			"rusty-smash",
+			"Rusty Smash",
 			[1280, 720]
-		)
-		.exit_on_esc(true)
-	);
+		).exit_on_esc(true).opengl(opengl).into();
 
 	let mut app = app::App::new();
-	let mut gl = GlGraphics::new(OpenGL::_3_2);
-	for e in window.events() {
+	for e in window {
 		if let Some(Button::Keyboard(key)) = e.press_args() {
 			app.keypress(key)
 		}
@@ -36,8 +28,6 @@ fn main() {
 			app.update(&u);
 		}
 
-		if let Some(r) = e.render_args() {
-			app.render(&r, &mut gl);
-		}
+		app.render(e);
 	}
 }

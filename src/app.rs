@@ -1,6 +1,4 @@
-use piston::event::*;
-use opengl_graphics::{ GlGraphics };
-use piston::input::keyboard::Key;
+use piston_window::*;
 
 use player::*;
 
@@ -9,16 +7,13 @@ pub struct App {
 }
 
 impl App {
-	pub fn render(&mut self, args: &RenderArgs, gl: &mut GlGraphics) {
-		use graphics::*;
-
-		const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
-
-		gl.draw(args.viewport(), |c, gl| {
-			clear(BLACK, gl);
+	pub fn render(&mut self, e: PistonWindow) {
+		e.draw_2d(|c, gl| {
+			clear([1.0; 4], gl);
 			for player in self.players.iter() {
-				let transform = player.transform(c);
-				image(player.get_texture(), transform, gl);
+				rectangle([0.0, 1.0, 0.0, 1.0], // red
+                      player.get_rect(),
+                      c.transform, gl);
 			}
 		});
 	}
